@@ -1,6 +1,8 @@
 import Head from "next/head";
 import { Geist, Geist_Mono } from "next/font/google";
 import Slider from "@/components/Slider";
+import ProductList from "@/components/ProductList";
+import styles from "../styles/Home.module.css";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -14,7 +16,7 @@ const geistMono = Geist_Mono({
 
 export default function Home() {
   return (
-    <>
+    <div className={styles.container}>
       <Head>
         <title>Torreblanca Restaurant</title>
         <meta name="description" content="Best restaurant in Torreblanca" />
@@ -23,6 +25,7 @@ export default function Home() {
       </Head>
 
       <Slider />
-    </>
+      <ProductList />
+    </div>
   );
 }
