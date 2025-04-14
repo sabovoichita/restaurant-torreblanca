@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import Slider from "@/components/Slider";
 import ProductList from "@/components/ProductList";
 import styles from "../styles/Home.module.css";
+import axios from "axios";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -14,7 +15,7 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-export default function Home() {
+export default function Home({ productList }) {
   return (
     <div className={styles.container}>
       <Head>
@@ -25,7 +26,16 @@ export default function Home() {
       </Head>
 
       <Slider />
-      <ProductList />
+      <ProductList productList={productList} />
     </div>
   );
 }
+
+export const getServerSideProps = async () => {
+  const res = await axios.get("http://localhost:3000/api/products");
+  return {
+    props: {
+      productList: res.data,
+    },
+  };
+};
