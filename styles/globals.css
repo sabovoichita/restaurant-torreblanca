@@ -1,6 +1,7 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --gold: #b7903c;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -32,9 +33,63 @@ body {
   margin: 0;
 }
 
+h1 {
+  line-height: 84px;
+  font-size: 62px;
+  color: var(--gold);
+  text-align: center;
+}
+
+h2 {
+  line-height: 46px;
+  font-size: 32px;
+  color: var(--gold);
+}
+
+h3 {
+  line-height: 30px;
+  font-size: 20px;
+  color: var(--gold);
+}
+
+h1,
+h2,
+h3 {
+  font-weight: bold;
+}
+
+p {
+  line-height: 2;
+  color: black/80;
+}
+
 a {
   color: inherit;
+  transition: all;
+  transition-duration: 300;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  column-gap: 16px;
+  padding: 0 10px;
   text-decoration: none;
+}
+
+a:hover {
+  color: white;
+  border-bottom: 5px solid white;
+  padding: 0 10px;
+  border-radius: 50%;
+  transition: 0.5s ease;
+}
+
+label {
+  color: white;
+  font-size: small;
+  text-transform: uppercase;
+  font-weight: normal;
+  display: block;
+  margin-bottom: 0.5rem;
 }
 
 @media (prefers-color-scheme: dark) {
