@@ -1,0 +1,66 @@
+.container {
+  min-height: calc(100vh-100px);
+  background-image: url("/image/footer/bg.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  display: flex;
+}
+
+.item {
+  flex: 2;
+  display: flex;
+}
+
+.item:last-child {
+  flex: 1;
+  padding: 10px;
+  opacity: 80%;
+  position: relative;
+  justify-content: space-between;
+}
+.imgContainer img {
+  border-radius: 50%;
+}
+
+.card {
+  flex: 1;
+  padding: 0 20px;
+  text-align: center;
+}
+
+.title {
+  font-size: 18px;
+  color: #b7903c;
+}
+
+.text {
+  color: lightgray;
+}
+
+.motto {
+  color: rgb(211, 211, 211);
+}
+
+@media screen and (max-width: 480px) {
+  .container {
+    height: auto;
+    text-align: center;
+    display: block;
+  }
+
+  .item {
+    flex-direction: column;
+  }
+
+  .title {
+    font-size: 30px;
+  }
+
+  .text {
+    font-size: 20px;
+  }
+  .imgContainer img {
+    display: none;
+  }
+}
