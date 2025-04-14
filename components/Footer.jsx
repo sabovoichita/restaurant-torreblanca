@@ -32,8 +32,8 @@ const Footer = () => {
           <div className={styles.imgContainer}>
             <Image
               src="/image/logo/truscai-logo.png"
-              // objectFit="cover"
-              layout="fill"
+              width={30}
+              height={30}
               alt="background"
             />
           </div>

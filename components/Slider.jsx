@@ -51,8 +51,8 @@ const Slider = () => {
       >
         <Image
           src="/image/arrows/arrow-left.svg"
-          layout="fill"
-          objectFit="contain"
+          width={100}
+          height={100}
           alt="arrow-left"
         />
       </div>
@@ -66,7 +66,6 @@ const Slider = () => {
               src={img}
               width={600}
               height={400}
-              objectFit="contain"
               alt={`image-${i}`}
               id={`${i}`}
             />
@@ -80,8 +79,8 @@ const Slider = () => {
       >
         <Image
           src="/image/arrows/arrow-right.svg"
-          layout="fill"
-          objectFit="contain"
+          width={100}
+          height={100}
           alt="arrow-right"
         />
       </div>
