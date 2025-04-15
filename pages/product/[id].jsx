@@ -4,7 +4,7 @@ import styles from "../../styles/Product.module.css";
 import axios from "axios";
 
 const Product = ({ product }) => {
-  console.log(product);
+  // console.log(product);
 
   const [size, setSize] = useState(0);
   const [price, setPrize] = useState(product.prices[0]);

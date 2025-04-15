@@ -1,5 +1,5 @@
-const { default: Footer } = require("./Footer");
-const { default: Navbar } = require("./Navbar");
+import Navbar from "./Navbar";
+import Footer from "./Footer";
 
 const Layout = ({ children }) => {
   return (

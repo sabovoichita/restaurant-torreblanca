@@ -32,10 +32,19 @@ export default function Home({ productList }) {
 }
 
 export const getServerSideProps = async () => {
-  const res = await axios.get("http://localhost:3000/api/products");
-  return {
-    props: {
-      productList: res.data,
-    },
-  };
+  try {
+    const res = await axios.get("http://localhost:3000/api/products");
+    return {
+      props: {
+        productList: res.data,
+      },
+    };
+  } catch (err) {
+    console.error("getServerSideProps error:", err.message);
+    return {
+      props: {
+        productList: [],
+      },
+    };
+  }
 };
