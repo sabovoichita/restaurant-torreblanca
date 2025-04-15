@@ -3,6 +3,7 @@ import styles from "../styles/Navbar.module.css";
 // import { useSelector } from "react-redux";
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
+import Link from "next/link";
 
 const Navbar = () => {
   const [isClient, setIsClient] = useState(false);
@@ -42,13 +43,20 @@ const Navbar = () => {
           <li className={styles.listItem}>Contact</li>
         </ul>
       </div>
-      <div className={styles.item}>
-        <div className={styles.cart}>
-          <h2 className={styles.listItem}>Orders</h2>
-          {/* <div className={styles.counter}>2</div> */}
-          {isClient && <div className={styles.counter}>{quantity}</div>}
+      <Link href={"/cart"}>
+        <div className={styles.item}>
+          <div className={styles.cart}>
+            {/* <div className={styles.counter}>2</div> */}
+            <Image
+              src="/image/icons/icons-cart.svg"
+              alt="logo"
+              width="40"
+              height="40"
+            />
+            {isClient && <div className={styles.counter}>{quantity}</div>}
+          </div>
         </div>
-      </div>
+      </Link>
     </div>
   );
 };
