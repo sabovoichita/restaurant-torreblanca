@@ -23,25 +23,33 @@ const Cart = () => {
             <tr className={styles.tr} key={product._id}>
               <td>
                 <div className={styles.imgContainer}>
-                  <Image src="/image/menu/1.png" width={100} height={50} />
+                  <Image
+                    src={`/image/menu/${product.img}.png`}
+                    width={100}
+                    height={50}
+                  />
                 </div>
               </td>
               <td>
-                <span className={styles.name}>Carrot Cake</span>
+                <span className={styles.name}>{product.title}</span>
               </td>
               <td>
                 <span className={styles.extras}>
-                  Double chocolate, Extra fruits
+                  {product.extras.map((extra) => (
+                    <span key={extra._id}>{extra.text} </span>
+                  ))}
                 </span>
               </td>
               <td>
-                <span className={styles.price}>30</span>
+                <span className={styles.price}>{product.price}</span>
               </td>
               <td>
-                <span className={styles.quantity}>2</span>
+                <span className={styles.quantity}>{product.quantity}</span>
               </td>
               <td>
-                <span className={styles.total}>60</span>
+                <span className={styles.total}>
+                  {product.price * product.quantity}
+                </span>
               </td>
             </tr>
           ))}
@@ -51,13 +59,15 @@ const Cart = () => {
         <div className={styles.wrapper}>
           <h2 className={styles.title}>CART TOTAL</h2>
           <div className={styles.totalText}>
-            <b className={styles.totalTextTitle}>Subtotal:</b>80
+            <b className={styles.totalTextTitle}>Subtotal:</b>
+            {cart.total}
           </div>
           <div className={styles.totalText}>
             <b className={styles.totalTextTitle}>Discount:</b>0.00
           </div>
           <div className={styles.totalText}>
-            <b className={styles.totalTextTitle}>Total:</b>80
+            <b className={styles.totalTextTitle}>Total:</b>
+            {cart.total}
           </div>
           <button className={styles.button}>CHECKOUT NOW!</button>
         </div>
