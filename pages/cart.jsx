@@ -1,7 +1,10 @@
 import styles from "../styles/Cart.module.css";
 import Image from "next/image";
+import { useDispatch, useSelector } from "react-redux";
 
 const Cart = () => {
+  const dispatch = useDispatch();
+  const cart = useSelector((state) => state.cart);
   return (
     <div className={styles.container}>
       <div className={styles.left}>
@@ -16,8 +19,8 @@ const Cart = () => {
               <th>Total</th>
             </tr>
           </thead>
-          <tbody>
-            <tr className={styles.tr}>
+          {cart.products.map((product) => (
+            <tr className={styles.tr} key={product._id}>
               <td>
                 <div className={styles.imgContainer}>
                   <Image src="/image/menu/1.png" width={100} height={50} />
@@ -41,36 +44,7 @@ const Cart = () => {
                 <span className={styles.total}>60</span>
               </td>
             </tr>
-            <tr className={styles.tr}>
-              <td>
-                <div className={styles.imgContainer}>
-                  <Image
-                    src="/image/menu/biscuitcake.jpg"
-                    alt=""
-                    width={100}
-                    height={50}
-                  />
-                </div>
-              </td>
-              <td>
-                <span className={styles.name}>Biscuit Cake</span>
-              </td>
-              <td>
-                <span className={styles.extras}>
-                  Extra chocolate, Extra Candles{" "}
-                </span>
-              </td>
-              <td>
-                <span className={styles.price}>20</span>
-              </td>
-              <td>
-                <span className={styles.quantity}>1</span>
-              </td>
-              <td>
-                <span className={styles.total}>20</span>
-              </td>
-            </tr>
-          </tbody>
+          ))}
         </table>
       </div>
       <div className={styles.right}>
