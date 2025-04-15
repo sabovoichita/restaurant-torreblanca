@@ -20,12 +20,7 @@ const Cart = () => {
             <tr className={styles.tr}>
               <td>
                 <div className={styles.imgContainer}>
-                  <Image
-                    src="/image/menu/1.png"
-                    layout="fill"
-                    objectFit="cover"
-                    alt="cake"
-                  />
+                  <Image src="/image/menu/1.png" width={500} height={300} />
                 </div>
               </td>
               <td>
@@ -51,9 +46,9 @@ const Cart = () => {
                 <div className={styles.imgContainer}>
                   <Image
                     src="/image/menu/biscuitcake.jpg"
-                    layout="fill"
-                    objectFit="cover"
                     alt=""
+                    width={500}
+                    height={300}
                   />
                 </div>
               </td>

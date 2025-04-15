@@ -68,6 +68,7 @@ const Slider = () => {
               height={400}
               alt={`image-${i}`}
               id={`${i}`}
+              priority
             />
           </div>
         ))}

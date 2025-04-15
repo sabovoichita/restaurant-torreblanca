@@ -1,11 +1,11 @@
-// util/mongo.js
-
 import mongoose from "mongoose";
 
 const MONGO_URI = process.env.MONGO_URI;
 
 if (!MONGO_URI) {
-  throw new Error("Please define the MONGO_URI environment variable");
+  throw new Error(
+    "Please define the MONGO_URI environment variable inside .env"
+  );
 }
 
 let cached = global.mongoose;
@@ -16,21 +16,26 @@ if (!cached) {
 
 async function dbConnect() {
   if (cached.conn) {
-    console.error("Create product error:", err);
-    res.status(500).json({ message: "Server error", error: err.message });
-
     return cached.conn;
   }
 
   if (!cached.promise) {
-    cached.promise = mongoose.connect(MONGO_URI, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
+    cached.promise = mongoose
+      .connect(MONGO_URI, {
+        bufferCommands: false,
+      })
+      .then((mongoose) => {
+        return mongoose;
+      });
   }
 
-  cached.conn = await cached.promise;
-  return cached.conn;
+  try {
+    cached.conn = await cached.promise;
+    return cached.conn;
+  } catch (err) {
+    console.error("MongoDB connection error:", err); // ✅ this is correct
+    throw err;
+  }
 }
 
 export default dbConnect;

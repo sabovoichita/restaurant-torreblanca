@@ -37,9 +37,10 @@ const Product = ({ product }) => {
         <div className={styles.imgContainer}>
           <Image
             src={`/image/menu/${product.img}.png`}
-            objectFit="contain"
-            layout="fill"
+            width={500}
+            height={300}
             alt="product"
+            priority
           />
         </div>
       </div>
@@ -50,15 +51,25 @@ const Product = ({ product }) => {
         <h3 className={styles.choose}>Choose the size</h3>
         <div className={styles.sizes}>
           <div className={styles.size} onClick={() => handleSize(0)}>
-            <Image src="/image/menu/1.png" layout="fill" alt="size-1" />
+            <Image src="/image/menu/1.png" alt="" width={30} height={15} />
             <span className={styles.number}>Small</span>
           </div>
           <div className={styles.size} onClick={() => handleSize(1)}>
-            <Image src="/image/menu/1.png" layout="fill" alt="size-2" />
+            <Image
+              src="/image/menu/1.png"
+              width={40}
+              height={20}
+              alt="size-2"
+            />
             <span className={styles.number}>Medium</span>
           </div>
           <div className={styles.size} onClick={() => handleSize(2)}>
-            <Image src="/image/menu/1.png" layout="fill" alt="size-3" />
+            <Image
+              src="/image/menu/1.png"
+              width={50}
+              height={30}
+              alt="size-3"
+            />
             <span className={styles.number}>Large</span>
           </div>
         </div>
