@@ -9,6 +9,7 @@ const Product = ({ product }) => {
   const [size, setSize] = useState(0);
   const [price, setPrize] = useState(product.prices[0]);
   const [extras, setExtras] = useState([]);
+  const [quantity, setQuantity] = useState(1);
 
   const changePrice = (number) => {
     setPrize(price + number);
@@ -79,7 +80,12 @@ const Product = ({ product }) => {
           ))}
         </div>
         <div className={styles.add}>
-          <input type="number" defaultValue={1} className={styles.quantity} />
+          <input
+            onChange={(e) => setQuantity(e.target.value)}
+            type="number"
+            defaultValue={1}
+            className={styles.quantity}
+          />
           <button className={styles.button}>Add to Cart</button>
         </div>
       </div>
