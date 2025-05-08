@@ -3,13 +3,13 @@ import styles from "../../styles/Order.module.css";
 import Image from "next/image";
 import axios from "axios";
 
-const Order = ({ orderData }) => {
-  const [order, setOrder] = useState(orderData);
-
+const Order = ({ order }) => {
+  const [order, setOrder] = useState(order);
+  const status = order.status;
   const statusClass = (index) => {
-    if (index - order.status < 1) return styles.done;
-    if (index - order.status === 1) return styles.inProgress;
-    if (index - order.status > 1) return styles.undone;
+    if (index - status < 1) return styles.done;
+    if (index - status === 1) return styles.inProgress;
+    if (index - status > 1) return styles.undone;
   };
 
   useEffect(() => {
@@ -171,10 +171,10 @@ export const getServerSideProps = async (context) => {
 
   try {
     const res = await axios.get(`http://localhost:3000/api/orders/${id}`);
-    return { props: { orderData: res.data } };
+    return { props: { order: res.data } };
   } catch (err) {
     console.error("Failed to fetch order:", err);
-    return { props: { orderData: null } };
+    return { props: { order: null } };
   }
 };
 
