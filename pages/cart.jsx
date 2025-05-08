@@ -7,6 +7,7 @@ import {
   usePayPalScriptReducer,
 } from "@paypal/react-paypal-js";
 import { useState } from "react";
+import { reset } from "@/redux/cartSlice";
 
 const Cart = () => {
   const dispatch = useDispatch();
@@ -30,6 +31,7 @@ const Cart = () => {
     return actions.order.capture().then((details) => {
       console.log("Payment approved: ", details);
       // Optional: You could dispatch a success message or update order status
+      dispatch(reset());
     });
   };
 
