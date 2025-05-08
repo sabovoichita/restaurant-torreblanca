@@ -8,30 +8,59 @@ import {
 } from "@paypal/react-paypal-js";
 import { useState } from "react";
 import { reset } from "@/redux/cartSlice";
+import axios from "axios";
+import { useRouter } from "next/router";
 
 const Cart = () => {
   const dispatch = useDispatch();
   const cart = useSelector((state) => state.cart);
   const [open, setOpen] = useState(false);
+
   const style = { layout: "vertical" };
 
-  const createOrder = (data, actions) => {
+  const router = useRouter();
+
+  const subtotal = cart.products.reduce((acc, product) => {
+    return acc + product.price * product.quantity;
+  }, 0);
+
+  const discount = 0;
+  const total = subtotal - discount;
+
+  const createPayPalOrder = (data, actions) => {
     return actions.order.create({
       purchase_units: [
         {
           amount: {
-            value: cart.total.toFixed(2), // Ensure this is a string with 2 decimal places
+            value: total.toFixed(2),
           },
         },
       ],
     });
   };
 
+  const createOrder = async (data) => {
+    try {
+      const res = await axios.post("http://localhost:3000/api/orders", data);
+      if (res.status === 201) {
+        router.push("/orders/" + res.data._id);
+      }
+      dispatch(reset());
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   const onApprove = (data, actions) => {
     return actions.order.capture().then((details) => {
-      console.log("Payment approved: ", details);
-      // Optional: You could dispatch a success message or update order status
-      dispatch(reset());
+      const shipping = details.purchase_units[0].shipping;
+      console.log("Payment approved: ", details, shipping);
+      createOrder({
+        customer: shipping.name.full_name,
+        address: shipping.address.address_line_1,
+        total: total,
+        method: 1,
+      });
     });
   };
 
@@ -43,7 +72,7 @@ const Cart = () => {
         {showSpinner && isPending && <div className="spinner" />}
         <PayPalButtons
           style={style}
-          createOrder={createOrder}
+          createOrder={createPayPalOrder}
           onApprove={onApprove}
         />
       </>
@@ -108,14 +137,14 @@ const Cart = () => {
           <h2 className={styles.title}>CART TOTAL</h2>
           <div className={styles.totalText}>
             <b className={styles.totalTextTitle}>Subtotal:</b> €
-            {cart.total.toFixed(2)}
+            {subtotal.toFixed(2)}
           </div>
           <div className={styles.totalText}>
-            <b className={styles.totalTextTitle}>Discount:</b> €0.00
+            <b className={styles.totalTextTitle}>Discount:</b> €
+            {discount.toFixed(2)}
           </div>
           <div className={styles.totalText}>
-            <b className={styles.totalTextTitle}>Total:</b> €
-            {cart.total.toFixed(2)}
+            <b className={styles.totalTextTitle}>Total:</b> €{total.toFixed(2)}
           </div>
           {open ? (
             <div className={styles.paymentMethods}>

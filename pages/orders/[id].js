@@ -1,14 +1,31 @@
+import { useEffect, useState } from "react";
 import styles from "../../styles/Order.module.css";
 import Image from "next/image";
+import axios from "axios";
 
-const Order = () => {
-  const status = 0;
+const Order = ({ orderData }) => {
+  const [order, setOrder] = useState(orderData);
 
   const statusClass = (index) => {
-    if (index - status < 1) return styles.done;
-    if (index - status === 1) return styles.inProgress;
-    if (index - status > 1) return styles.undone;
+    if (index - order.status < 1) return styles.done;
+    if (index - order.status === 1) return styles.inProgress;
+    if (index - order.status > 1) return styles.undone;
   };
+
+  useEffect(() => {
+    if (!order) {
+      const fetchOrder = async () => {
+        try {
+          const response = await axios.get(`/api/orders/${order.id}`);
+          setOrder(response.data);
+        } catch (err) {
+          console.error("Error fetching order data:", err);
+        }
+      };
+      fetchOrder();
+    }
+  }, [order]);
+
   return (
     <div className={styles.container}>
       <div className={styles.left}>
@@ -25,23 +42,30 @@ const Order = () => {
             <tbody>
               <tr className={styles.tr}>
                 <td>
-                  <span className={styles.id}>123456789</span>
-                </td>
-                <td>
-                  <span className={styles.name}>Name Surname</span>
-                </td>
-                <td>
-                  <span className={styles.address}>
-                    2 San Antoni, Torreblanca
+                  <span className={styles.id}>
+                    {order ? order._id : "Loading..."}
                   </span>
                 </td>
                 <td>
-                  <span className={styles.total}>£89</span>
+                  <span className={styles.name}>
+                    {order ? order.customer : "Loading..."}
+                  </span>
+                </td>
+                <td>
+                  <span className={styles.address}>
+                    {order ? order.address : "Loading..."}
+                  </span>
+                </td>
+                <td>
+                  <span className={styles.total}>
+                    £{order ? order.total : "0.00"}
+                  </span>
                 </td>
               </tr>
             </tbody>
           </table>
         </div>
+
         <div className={styles.row}>
           <div className={statusClass(0)}>
             <Image
@@ -118,17 +142,20 @@ const Order = () => {
           </div>
         </div>
       </div>
+
       <div className={styles.right}>
         <div className={styles.wrapper}>
           <h2 className={styles.title}>CART TOTAL</h2>
           <div className={styles.totalText}>
-            <b className={styles.totalTextTitle}>Subtotal:</b>£89
+            <b className={styles.totalTextTitle}>Subtotal:</b>£
+            {order ? order.total : "0.00"}
           </div>
           <div className={styles.totalText}>
             <b className={styles.totalTextTitle}>Discount:</b>£0.00
           </div>
           <div className={styles.totalText}>
-            <b className={styles.totalTextTitle}>Total:</b>£89
+            <b className={styles.totalTextTitle}>Total:</b>£
+            {order ? order.total : "0.00"}
           </div>
           <button disabled className={styles.button}>
             PAID
@@ -137,6 +164,18 @@ const Order = () => {
       </div>
     </div>
   );
+};
+
+export const getServerSideProps = async (context) => {
+  const { id } = context.params;
+
+  try {
+    const res = await axios.get(`http://localhost:3000/api/orders/${id}`);
+    return { props: { orderData: res.data } };
+  } catch (err) {
+    console.error("Failed to fetch order:", err);
+    return { props: { orderData: null } };
+  }
 };
 
 export default Order;
