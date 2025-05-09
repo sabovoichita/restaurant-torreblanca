@@ -4,10 +4,10 @@
   background-color: #b7903c;
   display: flex;
   align-items: center;
-  justify-content: space-evenly;
+  justify-content: space-between;
   position: sticky;
   top: 0;
-  z-index: 999;
+  z-index: 1999;
 }
 
 .item {
@@ -60,6 +60,8 @@
 
 .listItem {
   font-weight: 500;
+  cursor: pointer;
+  margin: 0 15px;
 }
 
 .cart {
