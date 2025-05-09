@@ -10,11 +10,13 @@ import { useState } from "react";
 import { reset } from "@/redux/cartSlice";
 import axios from "axios";
 import { useRouter } from "next/router";
+import OrderDetail from "@/components/OrderDetail";
 
 const Cart = () => {
   const dispatch = useDispatch();
   const cart = useSelector((state) => state.cart);
   const [open, setOpen] = useState(false);
+  const [cash, setCash] = useState(false);
 
   const style = { layout: "vertical" };
 
@@ -148,7 +150,12 @@ const Cart = () => {
           </div>
           {open ? (
             <div className={styles.paymentMethods}>
-              <button className={styles.payButton}>CASH ON DELIVERY</button>
+              <button
+                className={styles.payButton}
+                onClick={() => setCash(true)}
+              >
+                CASH ON DELIVERY
+              </button>
               <div style={{ maxWidth: "750px", minHeight: "200px" }}>
                 <PayPalScriptProvider
                   options={{
@@ -170,6 +177,7 @@ const Cart = () => {
           )}
         </div>
       </div>
+      {cash && <OrderDetail total={cart.total} createOrder={createOrder} />}
     </div>
   );
 };
