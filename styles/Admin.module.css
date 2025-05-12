@@ -2,14 +2,17 @@
   padding: 50px;
   display: flex;
 }
+
 .item {
   flex: 1;
 }
+
 .table {
   width: 100%;
   border-spacing: 20px;
   text-align: left;
 }
+
 .button {
   border: none;
   color: white;

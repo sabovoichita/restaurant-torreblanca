@@ -1,7 +1,8 @@
 import Image from "next/image";
 import styles from "../../styles/Admin.module.css";
+import axios from "axios";
 
-const index = () => {
+const Index = ({ orders, products }) => {
   return (
     <div className={styles.container}>
       <div className={styles.item}>
@@ -16,25 +17,28 @@ const index = () => {
               <th>Action</th>
             </tr>
           </thead>
-          <tbody className={styles.tbody}>
-            <tr className={styles.trTitle}>
-              <td>
-                <Image
-                  src={"/image/menu/1.png"}
-                  alt={""}
-                  width="50"
-                  height="50"
-                />
-              </td>
-              <td>PizzaId</td>
-              <td>Pizza Title</td>
-              <td>$50</td>
-              <td>
-                <button className={styles.button}>Edit</button>
-                <button className={styles.button}>Delete</button>
-              </td>
-            </tr>
-          </tbody>
+
+          {products.map((product) => (
+            <tbody key={product._id}>
+              <tr className={styles.trTitle}>
+                <td>
+                  <Image
+                    src={`/image/menu/${product.img}.png`}
+                    alt={""}
+                    width="50"
+                    height="50"
+                  />
+                </td>
+                <td>{product._id.slice(0, 5)}...</td>
+                <td>{product.title}</td>
+                <td>{product.prices[0]}</td>
+                <td>
+                  <button className={styles.button}>Edit</button>
+                  <button className={styles.button}>Delete</button>
+                </td>
+              </tr>
+            </tbody>
+          ))}
         </table>
       </div>
       <div className={styles.item}>
@@ -43,6 +47,7 @@ const index = () => {
           <thead className={styles.thead}>
             <tr className={styles.trTitle}>
               <th>Id</th>
+              <th>Customer</th>
               <th>Total</th>
               <th>Payment</th>
               <th>Status</th>
@@ -66,4 +71,17 @@ const index = () => {
     </div>
   );
 };
-export default index;
+
+export const getServerSideProps = async () => {
+  const productRes = await axios.get("http://localhost:3000/api/products");
+  const orderRes = await axios.get("http://localhost:3000/api/orders");
+
+  return {
+    props: {
+      products: productRes.data,
+      orders: orderRes.data,
+    },
+  };
+};
+
+export default Index;
