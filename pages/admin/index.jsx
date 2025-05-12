@@ -1,8 +1,24 @@
 import Image from "next/image";
 import styles from "../../styles/Admin.module.css";
 import axios from "axios";
+import { useState } from "react";
 
 const Index = ({ orders, products }) => {
+  const [productList, setProductList] = useState(products);
+  const [orderList, setOrderList] = useState(orders);
+
+  const handleDelete = async (id) => {
+    // console.log("deleting", id);
+    try {
+      const res = await axios.delete(
+        "http://localhost:3000/api/products/" + id
+      );
+      setProductList(productList.filter((product) => product._id !== id));
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   return (
     <div className={styles.container}>
       <div className={styles.item}>
@@ -18,7 +34,7 @@ const Index = ({ orders, products }) => {
             </tr>
           </thead>
 
-          {products.map((product) => (
+          {productList.map((product) => (
             <tbody key={product._id}>
               <tr className={styles.trTitle}>
                 <td>
@@ -34,7 +50,12 @@ const Index = ({ orders, products }) => {
                 <td>{product.prices[0]}</td>
                 <td>
                   <button className={styles.button}>Edit</button>
-                  <button className={styles.button}>Delete</button>
+                  <button
+                    className={styles.button}
+                    onClick={() => handleDelete(product._id)}
+                  >
+                    Delete
+                  </button>
                 </td>
               </tr>
             </tbody>
