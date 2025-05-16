@@ -9,7 +9,7 @@ const AddButton = ({ setClose }) => {
         setClose(false);
       }}
     >
-      Add New Pizza
+      Add New Product
     </div>
   );
 };

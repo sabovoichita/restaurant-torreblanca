@@ -36,17 +36,30 @@ const Product = ({ product }) => {
   const handleClick = () => {
     dispatch(addProduct({ ...product, extras, price, quantity }));
   };
+  const rawImgUrl = product.img || "";
+  const decodedImg = decodeURIComponent(rawImgUrl);
+  const isExternal = decodedImg.startsWith("http");
 
+  const fallbackImg = "/image/logo/truscai-logo.png";
+
+  const imageSrc = isExternal
+    ? decodedImg
+    : `/image/menu/${rawImgUrl}${
+        /\.(png|jpe?g|webp)$/i.test(rawImgUrl) ? "" : ".png"
+      }`;
+
+  console.log("Product image:", rawImgUrl);
+  console.log("Decoded image:", decodedImg);
   return (
     <div className={styles.container}>
       <div className={styles.left}>
         <div className={styles.imgContainer}>
           <Image
-            src={`/image/menu/${product.img}.png`}
-            width={500}
-            height={300}
-            alt="product"
-            priority
+            src={imageSrc || fallbackImg}
+            alt={product.title || "Product image"}
+            width={200}
+            height={200}
+            unoptimized={isExternal}
           />
         </div>
       </div>
