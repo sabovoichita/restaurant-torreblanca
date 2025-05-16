@@ -32,7 +32,7 @@ export default function Home({ productList, admin }) {
       <ProductList productList={productList} />
       {!close && <Add setClose={setClose} />}
 
-      {!close && <span>Hello</span>}
+      {/* {!close && <span>Hello</span>} */}
       <Slider />
     </div>
   );
