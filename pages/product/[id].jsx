@@ -48,8 +48,8 @@ const Product = ({ product }) => {
         /\.(png|jpe?g|webp)$/i.test(rawImgUrl) ? "" : ".png"
       }`;
 
-  console.log("Product image:", rawImgUrl);
-  console.log("Decoded image:", decodedImg);
+  // console.log("Product image:", rawImgUrl);
+  // console.log("Decoded image:", decodedImg);
   return (
     <div className={styles.container}>
       <div className={styles.left}>

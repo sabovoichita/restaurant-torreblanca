@@ -2,7 +2,6 @@ import Image from "next/image";
 import styles from "../../styles/Admin.module.css";
 import axios from "axios";
 import { useState } from "react";
-import { redirect } from "next/dist/server/api-utils";
 
 const Index = ({ orders, products }) => {
   const [productList, setProductList] = useState(products);
@@ -10,11 +9,8 @@ const Index = ({ orders, products }) => {
   const status = ["preparing", "on the way", "delivered"];
 
   const handleDelete = async (id) => {
-    // console.log("deleting", id);
     try {
-      const res = await axios.delete(
-        "http://localhost:3000/api/products/" + id
-      );
+      await axios.delete(`http://localhost:3000/api/products/${id}`);
       setProductList(productList.filter((product) => product._id !== id));
     } catch (err) {
       console.log(err);
@@ -22,12 +18,11 @@ const Index = ({ orders, products }) => {
   };
 
   const handleStatus = async (id) => {
-    console.log("handling", id);
     const order = orderList.find((order) => order._id === id);
     const currentStatus = order.status;
 
     try {
-      const res = await axios.put("http://localhost:3000/api/orders/" + id, {
+      const res = await axios.put(`http://localhost:3000/api/orders/${id}`, {
         status: currentStatus + 1,
       });
 
@@ -42,6 +37,7 @@ const Index = ({ orders, products }) => {
 
   return (
     <div className={styles.container}>
+      {/* Products Section */}
       <div className={styles.item}>
         <h1 className={styles.title}>Products</h1>
         <table className={styles.table}>
@@ -54,35 +50,51 @@ const Index = ({ orders, products }) => {
               <th>Action</th>
             </tr>
           </thead>
+          <tbody>
+            {productList.map((product) => {
+              const rawImgUrl = product.img || "";
+              const decodedImg = decodeURIComponent(rawImgUrl);
+              const isExternal = decodedImg.startsWith("http");
 
-          {productList.map((product) => (
-            <tbody key={product._id}>
-              <tr className={styles.trTitle}>
-                <td>
-                  <Image
-                    src={`/image/menu/${product.img}.png`}
-                    alt={""}
-                    width="50"
-                    height="50"
-                  />
-                </td>
-                <td>{product._id.slice(0, 5)}...</td>
-                <td>{product.title}</td>
-                <td>{product.prices[0]}</td>
-                <td>
-                  <button className={styles.button}>Edit</button>
-                  <button
-                    className={styles.button}
-                    onClick={() => handleDelete(product._id)}
-                  >
-                    Delete
-                  </button>
-                </td>
-              </tr>
-            </tbody>
-          ))}
+              const fallbackImg = "/image/logo/truscai-logo.png";
+
+              const imageSrc = isExternal
+                ? decodedImg
+                : `/image/menu/${rawImgUrl}${
+                    /\.(png|jpe?g|webp)$/i.test(rawImgUrl) ? "" : ".png"
+                  }`;
+
+              return (
+                <tr className={styles.trTitle} key={product._id}>
+                  <td>
+                    <Image
+                      src={imageSrc || fallbackImg}
+                      alt={product.title || "Product image"}
+                      width={50}
+                      height={50}
+                      unoptimized={isExternal}
+                    />
+                  </td>
+                  <td>{product._id.slice(0, 5)}...</td>
+                  <td>{product.title}</td>
+                  <td>{product.prices[0]}</td>
+                  <td>
+                    <button className={styles.button}>Edit</button>
+                    <button
+                      className={styles.button}
+                      onClick={() => handleDelete(product._id)}
+                    >
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
         </table>
       </div>
+
+      {/* Orders Section */}
       <div className={styles.item}>
         <h1 className={styles.title}>Orders</h1>
         <table className={styles.table}>
@@ -96,15 +108,13 @@ const Index = ({ orders, products }) => {
               <th>Action</th>
             </tr>
           </thead>
-          {orderList.map((order) => (
-            <tbody key={order._id}>
-              <tr className={styles.trTitle}>
+          <tbody>
+            {orderList.map((order) => (
+              <tr className={styles.trTitle} key={order._id}>
                 <td>{order._id.slice(0, 5)}...</td>
                 <td>{order.customer}</td>
                 <td>{order.total}</td>
-                <td>
-                  {order.method === 0 ? <span>cash</span> : <span>paid</span>}
-                </td>
+                <td>{order.method === 0 ? "cash" : "paid"}</td>
                 <td>{status[order.status]}</td>
                 <td>
                   <button onClick={() => handleStatus(order._id)}>
@@ -112,8 +122,8 @@ const Index = ({ orders, products }) => {
                   </button>
                 </td>
               </tr>
-            </tbody>
-          ))}
+            ))}
+          </tbody>
         </table>
       </div>
     </div>
@@ -121,7 +131,8 @@ const Index = ({ orders, products }) => {
 };
 
 export const getServerSideProps = async (ctx) => {
-  const myCookie = ctx.req?.cookies || "";
+  const myCookie = ctx.req?.cookies || {};
+
   if (myCookie.token !== process.env.TOKEN) {
     return {
       redirect: {
@@ -130,6 +141,7 @@ export const getServerSideProps = async (ctx) => {
       },
     };
   }
+
   const productRes = await axios.get("http://localhost:3000/api/products");
   const orderRes = await axios.get("http://localhost:3000/api/orders");
 
